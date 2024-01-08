@@ -46,21 +46,23 @@ div#upload-file-uploaded-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
+    height: 100%;
 }
 
 img#upload-file-uploaded {
-    width: 80%;
+    width: 30%;
     height: max-content;
 }
 
 div#upload-file-uploaded-layers {
     display: grid;
-    grid-template-rows: 100% 100%;
-    grid-template-columns: 20% 20% 20% 20%;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 25% 25% 25% 25%;
 }
 
 img.upload-file-uploaded-layer {
-    width: 100%;
+    justify-self: center;
+    width: 80%;
     height: max-content;
 }

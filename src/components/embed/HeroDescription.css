@@ -16,3 +16,7 @@ h2#hero-description-meta {
     font-size: 2.6rem;
     color: var(--font-meta-color);
 }
+
+progress#hero-progress-bar {
+    width: 100%;
+}
