@@ -1,4 +1,4 @@
-div#app {
+div#embed-wrapper {
   display: grid;
   grid-template-columns: repeat(2, 50vw);
   

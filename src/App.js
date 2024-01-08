@@ -1,13 +1,17 @@
-import './App.css';
-import HeroDescription from './components/embed/HeroDescription';
-import UploadFile from './components/UploadFile';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Embed from './components/Embed/Embed';
+import Landing from './components/Landing/Landing';
 
 function App() {
   return (
-    <div id="app">
-      <HeroDescription></HeroDescription>
-      <UploadFile></UploadFile>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />}>
+          <Route path='/embed' element={<Embed />}></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
