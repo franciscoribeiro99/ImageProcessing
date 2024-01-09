@@ -6,10 +6,15 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 16px;
 
-  --background-main-color: #FDFDFD;
-  --background-accent-color: #F8F9FF;
+  color: var(--font-main-color);
+
+  --background-main-color: #222222;
+  --background-accent-color: #161616;
 
   --box-border-color: #D9D9D9;
 
-  --font-meta-color: #656565;
+  --font-main-color: rgb(245, 245, 245);
+  --font-meta-color: rgb(163, 163, 163);
+
+  --button-fill-color: #2a5ec5;
 }

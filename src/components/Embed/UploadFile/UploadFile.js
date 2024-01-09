@@ -3,7 +3,7 @@ import './UploadFile.css'
 import { useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-export default function UploadFile() {
+export default function UploadFile({ setProgressBarValue }) {
     const [ fileDataURL, setFileDataURL ] = useState(null)
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -25,6 +25,7 @@ export default function UploadFile() {
 
     useEffect(() => {
         if (fileDataURL !== null) {
+            setProgressBarValue(50);
             // fetch("http://localhost:8000/layers", {
             //     method: 'post',
             //     headers: {
