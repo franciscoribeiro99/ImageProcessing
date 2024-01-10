@@ -46,7 +46,7 @@ export default function UploadFile({ setProgressBarValue }) {
             { 
                 fileDataURL === null ?
                 <>
-                    <img id='upload-file-icon' alt='upload-file-icon' src='https://cdn3.iconfinder.com/data/icons/file-and-folder-fill-icons-set/144/File_Upload-512.png'></img>
+                    <img id='upload-file-icon' alt='upload-file-icon' src='https://i.imgur.com/KFRAvbY.png'></img>
                     <div id='upload-file-text-wrapper'>
                         <h3 id='upload-file-text-title'>
                             Drop your image here or browse.

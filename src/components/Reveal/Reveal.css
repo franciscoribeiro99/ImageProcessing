@@ -1,0 +1,9 @@
+div#reveal-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 50vw);
+    
+    min-height: 100vh;
+  
+    background-color: var(--background-main-color);
+  }
+  
