@@ -63,5 +63,5 @@ def get_text_dimensions(text_string, font):
     return text_width, text_height
 
 # Example Usage
-embed_secret('images/image.png', 'Hello ', 'output/ImageWithHiddenText.png')
+#embed_secret('images/image.png', 'Hello ', 'output/ImageWithHiddenText.png')
 #extract_secret('output/siuuu.png', 'extractedImage.png')
