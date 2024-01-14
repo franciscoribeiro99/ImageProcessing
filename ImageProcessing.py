@@ -1,5 +1,5 @@
-import cv2
 import numpy as np
+import cv2
 from PIL import Image, ImageDraw, ImageFont
 
 def read_image(image_path):
@@ -63,5 +63,5 @@ def get_text_dimensions(text_string, font):
     return text_width, text_height
 
 # Example Usage
-#embed_secret('images/image.png', 'Hello ', 'output/ImageWithHiddenText.png')
-#extract_secret('output/siuuu.png', 'extractedImage.png')
+embed_secret('imagesInput/image.png', 'Hello ', 'imageWithHiddenText/ImageWithHiddenText.png')
+#extract_secret('imageWithHiddenText/ImageWithHiddenText.png', 'extractedText.png')
