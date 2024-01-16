@@ -1,8 +1,13 @@
 from flask import Flask, request, send_file
+from flask_cors import CORS
 import ImageProcessing
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
 
+@app.route('/status', methods=['GET'])
+def status():
+    return '', 200 
 
 @app.route('/embed_secret', methods=['POST'])
 def embed_secret():
@@ -16,7 +21,6 @@ def embed_secret():
 
     # Return the path of the modified image
     return send_file(output_path, as_attachment=True)
-
 
 @app.route('/extract_secret', methods=['POST'])
 def extract_secret():
