@@ -1,0 +1,35 @@
+nav#navigation-wrapper {
+    position: absolute;
+    top: 0;
+    right: 5%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 20%;
+    height: 5vh;
+
+}
+
+nav#navigation-wrapper > a {
+    padding: 0;
+
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+div#navigation-tip {
+    width: 35%;
+    height: 60%;
+    
+    background-color: #ffdd00;
+    border-radius: 5px;
+
+    background-image: url('/public/resources/buy-me-coffee.svg');
+    background-repeat: no-repeat;
+    background-size: auto 80%;
+    background-position: center;
+
+    cursor: pointer;
+}

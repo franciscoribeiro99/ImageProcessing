@@ -1,4 +1,5 @@
 import { Outlet, Link } from 'react-router-dom'
+import Status from '../Status/Status'
 
 import './Landing.css'
 
@@ -24,6 +25,7 @@ export default function Landing() {
                         </div>
                     </div>
                 </div>
+                <Status />
             </div>
             <Outlet />
         </>

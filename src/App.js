@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Landing from './components/Landing/Landing';
 import Embed from './components/Embed/Embed';
@@ -11,6 +11,7 @@ function App() {
         <Route path='/' element={<Landing />} />
         <Route path='/embed' element={<Embed />} />
         <Route path='/reveal' element={<Reveal />} />
+        <Route path='*' element={<Navigate to='/'/>} />
       </Routes>
     </BrowserRouter>
   );
