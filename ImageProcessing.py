@@ -1,4 +1,5 @@
 import os
+import textwrap
 
 import numpy as np
 import cv2
@@ -64,12 +65,19 @@ def text_to_image(text, width, height, font_path, font_size):
     img = Image.new("RGB", (width, height), color=(0, 0, 0))
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(font_path, size=font_size)
+    max_chars_per_line = (width // (font_size // 2))-15
+    lines = textwrap.wrap(text, width=max_chars_per_line)
 
-    text_width, text_height = get_text_dimensions(text, font)
-    x = (width - text_width) // 2
-    y = (height - text_height) // 2
+    total_text_height = sum(draw.textbbox((0, 0), line, font=font, anchor='mm')[3] for line in lines)
 
-    draw.text((x, y), text, fill=(255, 255,255), font=font)
+    y = (height - total_text_height) // 2
+
+    for line in lines:
+        text_bbox = draw.textbbox((0, 0), line, font=font, anchor='mm')
+        text_height = text_bbox[3] - text_bbox[1]
+        draw.text((width//2, y), line, fill=(255, 255, 255), font=font, anchor='mm')
+        y += text_height
+
 
     img = img.convert('L')
 
