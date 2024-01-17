@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import cv2
 from PIL import Image, ImageDraw, ImageFont
@@ -43,7 +45,7 @@ def embed_secret(cover_image_path, secret_text, output_path, font_path='font/fon
 
     bit_planes[0]=biplanesHidde[0]
     reconstructed_image = reconstruct_image(bit_planes)
-
+    display_bit_planes(bit_planes)
     # Modify only the LSB where the secret text is present
     reconstructed_image_with_secret = np.where(secret_binary_mask == 1, reconstructed_image & ~1 | secret_binary_mask, reconstructed_image)
 
@@ -51,13 +53,11 @@ def embed_secret(cover_image_path, secret_text, output_path, font_path='font/fon
 
 
 
-
-
 def extract_secret(stego_image_path, output_path):
     stego_image = read_image(stego_image_path)
     bit_planes = extract_8_bit_planes(stego_image)
     secret_image = bit_planes[0] * 255  # Assuming LSB is the first bit-plane
-
+    display_bit_planes(bit_planes)
     write_image(secret_image, output_path)
 
 def text_to_image(text, width, height, font_path, font_size):
@@ -81,9 +81,17 @@ def get_text_dimensions(text_string, font):
     text_height = font.getmask(text_string).getbbox()[3] + descent
     return text_width, text_height
 
-
+def display_bit_planes(bit_planes):
+    plt.figure(figsize=(10, 8))
+    for i in range(8):
+        plt.subplot(2, 4, i+1)
+        plt.imshow(bit_planes[i], cmap='gray')
+        plt.title(f'Bit Plane {i}')
+        plt.axis('off')
+        plt.imsave(f'layers/layers_{i}.png', bit_planes[i], format='png')
+    plt.tight_layout()
 
 
 # Example Usage
-embed_secret('imagesInput/image.png', 'CR7 ', 'imageWithHiddenText/ImageWithHiddenText.png')
+embed_secret('imagesInput/image.png', 'Hi', 'imageWithHiddenText/ImageWithHiddenText.png')
 extract_secret('imageWithHiddenText/ImageWithHiddenText.png', 'output/extractedText.png')
