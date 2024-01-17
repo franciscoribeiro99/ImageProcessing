@@ -88,10 +88,10 @@ def display_bit_planes(bit_planes):
         plt.imshow(bit_planes[i], cmap='gray')
         plt.title(f'Bit Plane {i}')
         plt.axis('off')
-        plt.imsave(f'layers/layers_{i}.png', bit_planes[i], format='png')
+        plt.imsave(f'layers/layer_{i}.png', bit_planes[i], format='png')
     plt.tight_layout()
 
 
 # Example Usage
-embed_secret('imagesInput/image.png', 'Hi', 'imageWithHiddenText/ImageWithHiddenText.png')
-extract_secret('imageWithHiddenText/ImageWithHiddenText.png', 'output/extractedText.png')
+#embed_secret('imagesInput/image.png', 'Hi', 'imageWithHiddenText/ImageWithHiddenText.png')
+#extract_secret('imageWithHiddenText/ImageWithHiddenText.png', 'output/extractedText.png')

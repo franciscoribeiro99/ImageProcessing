@@ -1,5 +1,7 @@
+import json
 import os
 
+import matplotlib.pyplot as plt
 from flask import Flask, request, send_file, send_from_directory
 from flask import Flask, request, send_file
 import ImageProcessing
@@ -12,8 +14,11 @@ def status():
 
 @app.route('/embed_secret', methods=['GET', 'POST'])
 def embed_secret():
-    data = request.json
+    with open('embed_secret.json', 'r') as embed_file:
+        data = json.load(embed_file)
+    #data = request.json
     cover_image_path = data['cover_image_path']
+    print(cover_image_path)
     secret_text = data['secret_text']
     output_path = data['output_path']
 
@@ -24,18 +29,15 @@ def embed_secret():
         send_from_directory(os.path.dirname(layer), os.path.basename(layer), as_attachment=True)
 
     layer_paths = 'layers'
-    for layer in layer_paths:
-        os.remove(f'{layer_paths}/{layer}')
-    os.remove('output/extractedText.png')
-    os.remove('imageWithHiddenText/extractedText.png')
-    os.remove('imagesInput/image.png')
-    # Return the path of the modified image
-    return 'done'
+
+    return '   it is  done'
 
 
 @app.route('/extract_secret', methods=['GET', 'POST'])
 def extract_secret():
-    data = request.json
+    with open('extract_secret.json', 'r') as embed_file:
+        data = json.load(embed_file)
+    #data = request.json
     stego_image_path = data['stego_image_path']
     output_path = data['output_path']
 
@@ -48,14 +50,9 @@ def extract_secret():
     for layer in layers:
         send_from_directory(os.path.dirname(layer), os.path.basename(layer), as_attachment=True)
 
-    layer_paths = 'layers'
-    for layer in layer_paths:
-        os.remove(f'{layer_paths}/{layer}')
-    os.remove('output/extractedText.png')
-    os.remove('imageWithHiddenText/extractedText.png')
-    os.remove('imagesInput/image.png')
+
     # Return the path of the extracted image
-    return 'done'
+    return '     it is done'
 
 
 
