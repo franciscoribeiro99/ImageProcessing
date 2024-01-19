@@ -4,9 +4,11 @@ import os
 import matplotlib.pyplot as plt
 from flask import Flask, request, send_file, send_from_directory
 from flask import Flask, request, send_file
+from flask_cors import CORS
 import ImageProcessing
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/status', methods=['GET'])
 def status():
@@ -14,9 +16,9 @@ def status():
 
 @app.route('/embed_secret', methods=['GET', 'POST'])
 def embed_secret():
-    with open('embed_secret.json', 'r') as embed_file:
-        data = json.load(embed_file)
-    #data = request.json
+    # with open('embed_secret.json', 'r') as embed_file:
+    #     data = json.load(embed_file)
+    data = request.json
     cover_image_path = data['cover_image_path']
     print(cover_image_path)
     secret_text = data['secret_text']
