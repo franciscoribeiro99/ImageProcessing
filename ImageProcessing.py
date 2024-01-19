@@ -1,3 +1,5 @@
+import base64
+import io
 import os
 import textwrap
 
@@ -5,6 +7,30 @@ import numpy as np
 import cv2
 from PIL import Image, ImageDraw, ImageFont
 from matplotlib import pyplot as plt
+from six import BytesIO
+
+
+def image_to_base64(image_array):
+    pil_image = Image.fromarray(image_array)
+
+    image_stream = io.BytesIO()
+
+    pil_image.save(image_stream, format='PNG')
+
+    base64_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+
+    return base64_image
+def base64_to_image(base64_string):
+    base64_string = str(base64_string)
+    padded_base64_string = base64_string + '=' * (4 - len(base64_string) % 4)
+
+    binary_data = base64.b64decode(padded_base64_string)
+    image_stream = BytesIO(binary_data)
+
+    pil_image = Image.open(image_stream)
+    image_array = np.array(pil_image)
+
+    return image_array
 
 
 def read_image(image_path):
@@ -12,18 +38,11 @@ def read_image(image_path):
    return cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
 
 def write_image(image, path):
+    #imm_arr = base64_to_image(image)
+
     cv2.imwrite(path, image)
 
 def extract_8_bit_planes(gray_image):
-    """
-    Extracts 8-bit planes from a grayscale image.
-
-    Parameters:
-    gray_image (numpy.ndarray): Input grayscale image.
-
-    Returns:
-    list: A list of 8 numpy arrays, each representing a bit plane of the input image.
-    """
     bit_planes = [np.zeros_like(gray_image) for _ in range(8)]
     for i in range(8):
         bit_planes[i] = np.bitwise_and(gray_image, 2 ** i)
@@ -33,33 +52,15 @@ def extract_8_bit_planes(gray_image):
 
 
 def reconstruct_image(bit_planes):
-    """
-        Reconstructs an image from its 8-bit planes.
-
-        Parameters:
-        bit_planes (list): A list of 8 numpy arrays, each representing a bit plane of an image.
-
-        Returns:
-        numpy.ndarray: Reconstructed image from the bit planes.
-        """
     reconstructed_image = np.zeros_like(bit_planes[0])
     for i, plane in enumerate(bit_planes):
         reconstructed_image |= (plane << i)
     return reconstructed_image
 
 
-def embed_secret(cover_image_path, secret_text, output_path, font_path='font/font.otf', font_size=100):
-    """
-      Embeds secret text into the least significant bit plane of a cover image.
-
-      Parameters:
-      cover_image_path (str): Path to the cover image.
-      secret_text (str): Text to be embedded.
-      output_path (str): Path to save the image with embedded text.
-      font_path (str, optional): Path to the font file. Defaults to 'font/font.otf'.
-      font_size (int, optional): Font size for rendering the text. Defaults to 100.
-      """
-    color_image = cv2.imread(cover_image_path)
+def embed_secret(cover_path_image, secret_text, output_path, font_path='font/font.otf', font_size=100):
+    color_image = cv2.imread(cover_path_image)
+    #print(type(color_image))
     # Convert secret text to binary image (as a mask)
     secret_binary_mask = text_to_image(secret_text, color_image.shape[1], color_image.shape[0], font_path, font_size)
 
@@ -83,13 +84,6 @@ def embed_secret(cover_image_path, secret_text, output_path, font_path='font/fon
 
 
 def extract_secret(stego_image_path, output_path):
-    """
-        Extracts secret text from the least significant bit plane of a stego image.
-
-        Parameters:
-        stego_image_path (str): Path to the stego image.
-        output_path (str): Path to save the extracted secret text as an image.
-        """
     stego_image = read_image(stego_image_path)
     bit_planes = extract_8_bit_planes(stego_image)
     secret_image = bit_planes[0] * 255  # Assuming LSB is the first bit-plane
@@ -97,19 +91,6 @@ def extract_secret(stego_image_path, output_path):
     write_image(secret_image, output_path)
 
 def text_to_image(text, width, height, font_path, font_size):
-    """
-        Converts text to a binary image.
-
-        Parameters:
-        text (str): Text to be converted.
-        width (int): Width of the output image.
-        height (int): Height of the output image.
-        font_path (str): Path to the font file.
-        font_size (int): Font size for rendering the text.
-
-        Returns:
-        numpy.ndarray: Binary image representing the input text.
-        """
     img = Image.new("RGB", (width, height), color=(0, 0, 0))
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype(font_path, size=font_size)
@@ -132,28 +113,12 @@ def text_to_image(text, width, height, font_path, font_size):
     return np.array(img)
 
 def get_text_dimensions(text_string, font):
-    """
-       Calculates the dimensions of a text string when rendered in a given font.
-
-       Parameters:
-       text_string (str): Text whose dimensions are to be calculated.
-       font (ImageFont): Font used for rendering the text.
-
-       Returns:
-       tuple: Width and height of the rendered text.
-       """
     ascent, descent = font.getmetrics()
     text_width = font.getmask(text_string).getbbox()[2]
     text_height = font.getmask(text_string).getbbox()[3] + descent
     return text_width, text_height
 
 def display_bit_planes(bit_planes):
-    """
-       Displays and saves the 8-bit planes of an image.
-
-       Parameters:
-       bit_planes (list): A list of 8 numpy arrays, each representing a bit plane of an image.
-       """
     plt.figure(figsize=(10, 8))
     for i in range(8):
         plt.subplot(2, 4, i+1)
