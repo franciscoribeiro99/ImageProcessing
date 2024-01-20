@@ -4,9 +4,12 @@ import os
 import matplotlib.pyplot as plt
 from flask import Flask, request, send_file, send_from_directory, jsonify
 from flask import Flask, request, send_file
+from flask_cors import CORS
+
 import ImageProcessing
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/status', methods=['GET'])
 def status():
@@ -14,6 +17,7 @@ def status():
 
 @app.route('/embed_secret', methods=['GET', 'POST'])
 def embed_secret():
+    # data = request.json
     with open('embed_secret.json', 'r') as embed_file:
         data = json.load(embed_file)
 
@@ -39,9 +43,9 @@ def embed_secret():
 
 @app.route('/extract_secret', methods=['GET', 'POST'])
 def extract_secret():
-    with open('extract_secret.json', 'r') as embed_file:
-        data = json.load(embed_file)
-    #data = request.json
+    # with open('extract_secret.json', 'r') as embed_file:
+    #     data = json.load(embed_file)
+    data = request.json
     stego_image = data['stego_image_path']
     output_path = 'output/extractedText.png'
 
