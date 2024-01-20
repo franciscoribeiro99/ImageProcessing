@@ -57,7 +57,7 @@ def reconstruct_image(bit_planes):
     return reconstructed_image
 
 
-def embed_secret(cover_path_image, secret_text, output_path, font_path='font/font.otf', font_size=100):
+def embed_secret(cover_path_image, secret_text, output_path, font_path='font/font.otf', font_size=20):
     color_image = cv2.imread(cover_path_image)
     #print(type(color_image))
     # Convert secret text to binary image (as a mask)
@@ -89,11 +89,18 @@ def extract_secret(stego_image_path, output_path):
     display_bit_planes(bit_planes)
     write_image(secret_image, output_path)
 
-def text_to_image(text, width, height, font_path, font_size):
+
+def text_to_image(text, width, height, font_path, min_font_size=10, max_font_size=50):
     img = Image.new("RGB", (width, height), color=(0, 0, 0))
     draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype(font_path, size=font_size)
-    max_chars_per_line = (width // (font_size // 2))-15
+
+    max_text_width, max_text_height = get_text_dimensions('W' * len(text),
+                                                          ImageFont.truetype(font_path, size=max_font_size))
+
+    font_size = max(min(max_font_size, (width / max_text_width) * max_font_size), min_font_size)
+
+    font = ImageFont.truetype(font_path, size=int(font_size))
+    max_chars_per_line = (width // (font_size // 2)) - 5
     lines = textwrap.wrap(text, width=max_chars_per_line)
 
     total_text_height = sum(draw.textbbox((0, 0), line, font=font, anchor='mm')[3] for line in lines)
@@ -103,9 +110,8 @@ def text_to_image(text, width, height, font_path, font_size):
     for line in lines:
         text_bbox = draw.textbbox((0, 0), line, font=font, anchor='mm')
         text_height = text_bbox[3] - text_bbox[1]
-        draw.text((width//2, y), line, fill=(255, 255, 255), font=font, anchor='mm')
+        draw.text((width // 2, y), line, fill=(255, 255, 255), font=font, anchor='mm')
         y += text_height
-
 
     img = img.convert('L')
 
