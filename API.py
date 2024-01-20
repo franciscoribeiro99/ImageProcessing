@@ -2,7 +2,7 @@ import json
 import os
 
 import matplotlib.pyplot as plt
-from flask import Flask, request, send_file, send_from_directory
+from flask import Flask, request, send_file, send_from_directory, jsonify
 from flask import Flask, request, send_file
 from flask_cors import CORS
 import ImageProcessing
@@ -16,44 +16,49 @@ def status():
 
 @app.route('/embed_secret', methods=['GET', 'POST'])
 def embed_secret():
+    data = request.json
     # with open('embed_secret.json', 'r') as embed_file:
     #     data = json.load(embed_file)
-    data = request.json
-    cover_image_path = data['cover_image_path']
-    print(cover_image_path)
+
+    cover_image_base64 = data['cover_image_path']
     secret_text = data['secret_text']
-    output_path = data['output_path']
+    output_path = 'imageWithHiddenText/ImageWithHiddenText.png'
+    imm_array = ImageProcessing.base64_to_image(cover_image_base64)
+    ImageProcessing.write_image(imm_array, 'imagesInput/image.png')
 
-    #function to embed the secret
-    ImageProcessing.embed_secret(cover_image_path, secret_text, output_path)
+    ImageProcessing.embed_secret('imagesInput/image.png', secret_text, output_path)
+    read_img_arr= ImageProcessing.read_image(output_path)
+    base64_extracted_image = ImageProcessing.image_to_base64(read_img_arr)
+    jsonify({'status': 'done', 'extracted_image': base64_extracted_image}), 200
+
     layer_paths = data.get('layers', [])
+    list_layer_base64 = []
     for layer in layer_paths:
-        send_from_directory(os.path.dirname(layer), os.path.basename(layer), as_attachment=True)
-
-    layer_paths = 'layers'
-
-    return '   it is  done'
-
+        list_layer_base64.append(ImageProcessing.image_to_base64(layer))
+    
+    return jsonify({'status': 'done', 'layers': list_layer_base64}), 200
 
 @app.route('/extract_secret', methods=['GET', 'POST'])
 def extract_secret():
     with open('extract_secret.json', 'r') as embed_file:
         data = json.load(embed_file)
     #data = request.json
-    stego_image_path = data['stego_image_path']
-    output_path = data['output_path']
+    stego_image = data['stego_image_path']
+    output_path = 'output/extractedText.png'
 
-    ImageProcessing.extract_secret(stego_image_path, output_path)
-
-    send_file(output_path, as_attachment=True)
-
+    imm_array = ImageProcessing.base64_to_image(stego_image)
+    ImageProcessing.write_image(imm_array, 'imageWithHiddenText/ImageWithHiddenText.png')
+    ImageProcessing.extract_secret('imageWithHiddenText/ImageWithHiddenText.png', output_path)
+    read_image_arr = ImageProcessing.read_image(output_path)
+    base64_extracted_image = ImageProcessing.image_to_base64(read_image_arr)
+    jsonify({'status': 'done', 'extracted_image': base64_extracted_image}), 200
 
     layers = data.get('layers', [])
+    list_layer_base64 = []
     for layer in layers:
-        send_from_directory(os.path.dirname(layer), os.path.basename(layer), as_attachment=True)
+        list_layer_base64.append(ImageProcessing.image_to_base64(layer))
+    jsonify({'status': 'done', 'layers': list_layer_base64}), 200
 
-
-    # Return the path of the extracted image
     return '     it is done'
 
 
