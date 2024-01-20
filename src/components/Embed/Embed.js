@@ -8,14 +8,18 @@ import HeroDescription from '../HeroDescription/HeroDescription'
 import UploadFile from '../UploadFile/UploadFile'
 
 export default function Embed() {
-    const [progressBarValue, setProgressBarValue] = useState(0)
+    const [ progressBarValue, setProgressBarValue ] = useState(0)
+    const [ fileDataURL, setFileDataURL ] = useState(null)
+    const [ secretEmbeddedImage, setSecretEmbeddedImage ] = useState(null)
+    const [ withTextInput, setWithTextInput ] = useState(true)
+    const [ metaText, setMetaText ] = useState('Please first upload your file 👉')
 
     return (
         <div id='embed-wrapper'>
             <Status />
             <Navigation />
-            <HeroDescription progressBarValue={progressBarValue} withTextInput={true} title={'Embed and hide any text into your image'} meta={'Please first upload your file 👉'} />
-            <UploadFile setProgressBarValue={setProgressBarValue} />
+            <HeroDescription progressBarValue={progressBarValue} setProgressBarValue={setProgressBarValue} fileDataURL={fileDataURL} setSecretEmbeddedImage={setSecretEmbeddedImage} withTextInput={withTextInput} setWithTextInput={setWithTextInput} title={'Embed and hide any text into your image'} meta={metaText} setMetaText={setMetaText} />
+            <UploadFile progressBarStepValue={50} setProgressBarValue={setProgressBarValue} fileDataURL={fileDataURL} setFileDataURL={setFileDataURL} secretEmbeddedImage={secretEmbeddedImage} setMetaText={setMetaText} nextMetaText='Please input the secret that shall be hidden into the image.' />
         </div>
     )
 }
