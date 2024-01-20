@@ -18,7 +18,6 @@ def image_to_base64(image_array):
     pil_image.save(image_stream, format='PNG')
 
     base64_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
-
     return base64_image
 def base64_to_image(base64_string):
     base64_string = str(base64_string)

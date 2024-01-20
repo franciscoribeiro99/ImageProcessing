@@ -4,11 +4,9 @@ import os
 import matplotlib.pyplot as plt
 from flask import Flask, request, send_file, send_from_directory, jsonify
 from flask import Flask, request, send_file
-from flask_cors import CORS
 import ImageProcessing
 
 app = Flask(__name__)
-CORS(app)
 
 @app.route('/status', methods=['GET'])
 def status():
@@ -16,9 +14,8 @@ def status():
 
 @app.route('/embed_secret', methods=['GET', 'POST'])
 def embed_secret():
-    data = request.json
-    # with open('embed_secret.json', 'r') as embed_file:
-    #     data = json.load(embed_file)
+    with open('embed_secret.json', 'r') as embed_file:
+        data = json.load(embed_file)
 
     cover_image_base64 = data['cover_image_path']
     secret_text = data['secret_text']
@@ -29,14 +26,16 @@ def embed_secret():
     ImageProcessing.embed_secret('imagesInput/image.png', secret_text, output_path)
     read_img_arr= ImageProcessing.read_image(output_path)
     base64_extracted_image = ImageProcessing.image_to_base64(read_img_arr)
-    jsonify({'status': 'done', 'extracted_image': base64_extracted_image}), 200
 
-    layer_paths = data.get('layers', [])
+    layer_folder = 'layers'
     list_layer_base64 = []
-    for layer in layer_paths:
-        list_layer_base64.append(ImageProcessing.image_to_base64(layer))
-    
-    return jsonify({'status': 'done', 'layers': list_layer_base64}), 200
+
+    for filename in os.listdir(layer_folder):
+        layer_path = os.path.join(layer_folder, filename)
+        list_layer_base64.append(ImageProcessing.image_to_base64(ImageProcessing.read_image(layer_path)))
+
+    return jsonify({'status': 'done', 'extracted_image': base64_extracted_image, 'layers': list_layer_base64})
+
 
 @app.route('/extract_secret', methods=['GET', 'POST'])
 def extract_secret():
@@ -51,15 +50,16 @@ def extract_secret():
     ImageProcessing.extract_secret('imageWithHiddenText/ImageWithHiddenText.png', output_path)
     read_image_arr = ImageProcessing.read_image(output_path)
     base64_extracted_image = ImageProcessing.image_to_base64(read_image_arr)
-    jsonify({'status': 'done', 'extracted_image': base64_extracted_image}), 200
 
-    layers = data.get('layers', [])
+    layer_folder = 'layers'
     list_layer_base64 = []
-    for layer in layers:
-        list_layer_base64.append(ImageProcessing.image_to_base64(layer))
-    jsonify({'status': 'done', 'layers': list_layer_base64}), 200
 
-    return '     it is done'
+    for filename in os.listdir(layer_folder):
+        layer_path = os.path.join(layer_folder, filename)
+        list_layer_base64.append(ImageProcessing.image_to_base64(ImageProcessing.read_image(layer_path)))
+
+
+    return  jsonify({'status': 'done', 'extracted_image': base64_extracted_image, 'layers': list_layer_base64})
 
 
 
