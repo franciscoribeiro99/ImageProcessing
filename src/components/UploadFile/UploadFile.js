@@ -73,7 +73,7 @@ export default function UploadFile({ progressBarStepValue, setProgressBarValue, 
                                     Drop your image here or browse.
                                 </h3>
                                 <h3 id='upload-file-text-meta'>
-                                    Supports PNG, JPG and JPEG.
+                                    Supports any image MIME sub-type.
                                 </h3>
                             </div>
                         </>
