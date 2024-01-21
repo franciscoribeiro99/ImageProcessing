@@ -18,9 +18,9 @@ def status():
     return '', 200
 
 
-# Endpoint to embed a secret in an image
 @app.route('/embed_secret', methods=['GET', 'POST'])
 def embed_secret():
+    '''Endpoint to embed a secret in an image'''
     # Read data from the 'embed_secret.json' file
     with open('embed_secret.json', 'r') as embed_file:
         data = json.load(embed_file)
@@ -53,9 +53,10 @@ def embed_secret():
     return jsonify({'status': 'done', 'extracted_image': base64_extracted_image, 'layers': list_layer_base64})
 
 
-# Endpoint to extract a secret from a image
+
 @app.route('/extract_secret', methods=['GET', 'POST'])
 def extract_secret():
+    '''Endpoint to extract a secret from a image'''
     # Extract data from the incoming JSON request
     data = request.json
     stego_image = data['stego_image_path']
