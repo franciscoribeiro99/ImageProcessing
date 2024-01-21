@@ -3,6 +3,10 @@ import { useState, useEffect } from 'react'
 import './Status.css'
 
 export default function Status() {
+    // the following component checks the backend's
+    // status periodically and notifies the user
+    // about its status
+
     const [isServiceUp, setServiceStatus] = useState(null)
     useEffect(() => {
         const checkStatus = setInterval(async () => {

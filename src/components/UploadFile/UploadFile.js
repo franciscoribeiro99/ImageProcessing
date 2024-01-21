@@ -5,6 +5,11 @@ import { useDropzone } from 'react-dropzone'
 import { triggerBase64Download } from 'react-base64-downloader'
 
 export default function UploadFile({ progressBarStepValue, setProgressBarValue, fileDataURL, setFileDataURL, secretEmbeddedImage, setMetaText, nextMetaText }) {
+    // the following components enables the user to uplaod
+    // or directly drag-and-drop an image into a dedicated
+    // region that is then further sent to the backend
+    // to get its layers
+    
     const [ fileLayers, setFileLayers ] = useState([])
     const [ isSpinnerVisible, setSpinnerVisibility ] = useState(false)
 
@@ -30,6 +35,8 @@ export default function UploadFile({ progressBarStepValue, setProgressBarValue, 
         setProgressBarValue(progressBarStepValue);
         setSpinnerVisibility(true)
 
+        // request the API to extract
+        // the different layers of the image
         const response = await fetch("http://localhost:5000/extract_secret", {
             method: 'post',
             headers: {
@@ -48,6 +55,8 @@ export default function UploadFile({ progressBarStepValue, setProgressBarValue, 
     }
 
     useEffect(() => {
+        // fetch the image's layers as
+        // an image is uploaded
         if (fileDataURL !== null) {
             fetchImageLayers()
         }

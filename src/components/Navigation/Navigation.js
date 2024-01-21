@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import './Navigation.css'
 
 export default function Navigation() {
+    // the following components enables users
+    // to navigate between the different pages
+
     const handleTipClick = () => {
         window.open('https://www.buymeacoffee.com/dionosmani', "_blank", "noreferrer")
     }
