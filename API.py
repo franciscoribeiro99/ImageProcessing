@@ -17,9 +17,9 @@ def status():
 
 @app.route('/embed_secret', methods=['GET', 'POST'])
 def embed_secret():
-    # data = request.json
-    with open('embed_secret.json', 'r') as embed_file:
-        data = json.load(embed_file)
+    data = request.json
+    # with open('embed_secret.json', 'r') as embed_file:
+    #     data = json.load(embed_file)
 
     cover_image_base64 = data['cover_image_path']
     secret_text = data['secret_text']
@@ -31,14 +31,15 @@ def embed_secret():
     read_img_arr= ImageProcessing.read_image(output_path)
     base64_extracted_image = ImageProcessing.image_to_base64(read_img_arr)
 
-    layer_folder = 'layers'
-    list_layer_base64 = []
+    # layer_folder = 'layers'
+    # list_layer_base64 = []
 
-    for filename in os.listdir(layer_folder):
-        layer_path = os.path.join(layer_folder, filename)
-        list_layer_base64.append(ImageProcessing.image_to_base64(ImageProcessing.read_image(layer_path)))
+    # for filename in os.listdir(layer_folder):
+    #     layer_path = os.path.join(layer_folder, filename)
+    #     list_layer_base64.append(ImageProcessing.image_to_base64(ImageProcessing.read_image(layer_path)))
 
-    return jsonify({'status': 'done', 'extracted_image': base64_extracted_image, 'layers': list_layer_base64})
+    # return jsonify({'status': 'done', 'extracted_image': base64_extracted_image, 'layers': list_layer_base64})
+    return jsonify({'status': 'done', 'extracted_image': base64_extracted_image})
 
 
 @app.route('/extract_secret', methods=['GET', 'POST'])
