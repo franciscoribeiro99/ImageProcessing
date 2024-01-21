@@ -57,7 +57,7 @@ def reconstruct_image(bit_planes):
     return reconstructed_image
 
 
-def embed_secret(cover_path_image, secret_text, output_path, font_path='font/font.otf', font_size=20):
+def embed_secret(cover_path_image, secret_text, output_path, font_path='font/font.ttf', font_size=20):
     color_image = cv2.imread(cover_path_image)
     #print(type(color_image))
     # Convert secret text to binary image (as a mask)
@@ -135,5 +135,5 @@ def display_bit_planes(bit_planes):
 
 
 # Example Usage
-#embed_secret('imagesInput/image.png', 'Hi', 'imageWithHiddenText/ImageWithHiddenText.png')
+embed_secret('imagesInput/image.png', 'Hi', 'imageWithHiddenText/ImageWithHiddenText.png')
 #extract_secret('imageWithHiddenText/ImageWithHiddenText.png', 'output/extractedText.png')
