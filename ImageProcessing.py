@@ -135,5 +135,5 @@ def display_bit_planes(bit_planes):
 
 
 # Example Usage
-embed_secret('imagesInput/image.png', 'Hi', 'imageWithHiddenText/ImageWithHiddenText.png')
+#embed_secret('imagesInput/image.png', 'Hi', 'imageWithHiddenText/ImageWithHiddenText.png')
 #extract_secret('imageWithHiddenText/ImageWithHiddenText.png', 'output/extractedText.png')
